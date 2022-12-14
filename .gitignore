@@ -4,3 +4,4 @@ media/audio/*.wav
 media/audio/*.caf
 api/migrations/*.py
 api/ml_models/*
+.DS_Store
