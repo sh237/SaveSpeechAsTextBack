@@ -2,7 +2,9 @@ from rest_framework import serializers
 from .models import AudioModel,TextModel
 from django.core.validators import FileExtensionValidator
 
+
 class AudioFileSerializer(serializers.Serializer):
+    """"Aufioファイルを受け取るためのシリアライザ"""
     file = serializers.FileField(
         validators=[FileExtensionValidator(allowed_extensions=['wav', 'caf', 'mp3', 'm4a', 'flac'])])
 
@@ -13,8 +15,8 @@ class AudioFileSerializer(serializers.Serializer):
     def create(self,validated_data):
         return AudioModel.objects.create(**validated_data)
 
-#TextSerializer
 class TextSerializer(serializers.Serializer):
+    """テキストを受け取るためのシリアライザ"""
     text = serializers.CharField(max_length=1000)
 
     class Meta:
