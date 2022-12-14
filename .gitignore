@@ -1,0 +1,6 @@
+.env
+api/potent-shade-371206-fa0dc2199e8f.json
+media/audio/*.wav
+media/audio/*.caf
+api/migrations/*.py
+api/ml_models/*
