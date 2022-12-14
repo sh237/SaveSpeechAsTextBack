@@ -18,7 +18,6 @@ NEWLINES_PATTERN = re.compile(r"(\s*\n\s*)+")
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
 GCS_BASE = "gs://ssat/"
 
-
 class AudioModel(models.Model):
     file = models.FileField(blank=False, null=False, upload_to='audio/')
 
