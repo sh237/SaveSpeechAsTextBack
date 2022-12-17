@@ -20,13 +20,13 @@ class AudioFileView(generics.GenericAPIView):
         converted_temp_audio_file = convert_to_wav(temp_audio_file)
         file_obj['file'] = converted_temp_audio_file
         
-        #ファイルを保存する
+        #
         serializer = AudioFileSerializer(data=file_obj)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         #ファイルを保存する
-        model = serializer.save(commit=False)
+        model = serializer.save()
         result = model.predicted_text()
         return Response(json.dumps({"result":result}), status=status.HTTP_201_CREATED)
 
@@ -40,7 +40,7 @@ class TextView(generics.GenericAPIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        model = serializer.save(commit=False)
+        model = serializer.save()
         #文章要約を行う
         _, summary = model.predict()
         return Response(json.dumps({"result":summary}), status=status.HTTP_201_CREATED)

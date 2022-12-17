@@ -61,7 +61,8 @@ CORS_ORIGIN_WHITELIST = [
 ]
 
 FILE_UPLOAD_HANDLERS = [
-'django.core.files.uploadhandler.TemporaryFileUploadHandler', ]
+    'django.core.files.uploadhandler.TemporaryFileUploadHandler', 
+]
 
 ROOT_URLCONF = "SaveSpeechAsTextBack.urls"
 
