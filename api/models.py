@@ -15,8 +15,9 @@ URL_PATTERN = re.compile(r"(http|ftp)s?://[^\s]+")
 NEWLINES_PATTERN = re.compile(r"(\s*\n\s*)+")
 
 # 環境変数の設定
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = os.environ['GOOGLE_APPLICATION_CREDENTIALS']
-GCS_BASE = "gs://ssat/"
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/Users/nagashimashunya/Django/SpeechSaveAsTextBack/SaveSpeechAsTextBack/api/stone-chariot-371804-8d0f0ecfcb5d.json'
+GCS_BASE = "gs://ssat_bucket/"
+
 
 class AudioModel(models.Model):
     file = models.FileField(blank=False, null=False, upload_to='audio/')
@@ -26,7 +27,7 @@ class AudioModel(models.Model):
 
     def predicted_text(self):
         client = storage.Client()  # GCSのクライアントを作成
-        bucket = client.get_bucket('ssat')  # バケットを取得
+        bucket = client.get_bucket('ssat_bucket')  # バケットを取得
         transcribe_file = self.file.name  # ファイル名を取得
         sound = AudioSegment.from_wav(self.file.path)  # 音声ファイルを読み込み
         sound.set_channels(1)  # チャンネル数を1に変換
@@ -59,7 +60,7 @@ class AudioModel(models.Model):
         # 音声ファイルの設定
         config = speech.RecognitionConfig(
             encoding=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
+            sample_rate_hertz=44100,
             language_code="ja-JP",
             audio_channel_count=1,
         )
@@ -94,13 +95,20 @@ class AudioModel(models.Model):
         operation = client.long_running_recognize(config=config, audio=audio)
 
         # テキストを返す
-        response = operation.result(timeout=length)
+        results = []
+        results_str = ""
+        response = operation.result(timeout=length*2)
         for i, result in enumerate(response.results):
             alternative = result.alternatives[0]
+            print("lens: {}".format(len(result.alternatives)))
+            for alternative in result.alternatives:
+                print("Transcript: {}", alternative.transcript)
             print("-" * 20)
             print("First alternative of result {}".format(i))
             print(u"Transcript: {}".format(alternative.transcript))
-        return result.alternatives[0]
+            results_str += alternative.transcript
+        results.append(results_str)
+        return results
 
 
 class TextModel(models.Model):

@@ -12,7 +12,7 @@ def convert_to_wav(audio_file, target_filetype='wav', content_type='audio/x-caf'
     #ファイルの情報を表示
     subprocess.run(f"afinfo {file_path}", shell=True)
     #コマンドによってwavファイルに変換
-    subprocess.run(f"afconvert -f WAVE -d LEI16 -c 1 -b 128000 {file_path} {new_path}", shell=True)
+    subprocess.run(f"afconvert -f WAVE -d LEI16@44100 -c 1 -b 128000 {file_path} {new_path}", shell=True)
 
     #変換後のファイルをFileオブジェクトに変換
     converted_audiofile = File(
